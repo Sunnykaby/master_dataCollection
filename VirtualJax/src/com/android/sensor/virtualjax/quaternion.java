@@ -26,7 +26,7 @@ public class quaternion {
 		this.y = y;
 		this.z = z;
 	}
-	//ËÄÔªÊı²æ³Ë
+	//å››å…ƒæ•°å‰ä¹˜
 	public quaternion Kakezan(quaternion left, quaternion right) 
 	{ 
 	              quaternion ans = new quaternion();  	  
@@ -40,7 +40,7 @@ public class quaternion {
 		quaternion ansQuaternion = new quaternion();
 		return ansQuaternion;
 	}
-	//¹²éîµÄËÄÔªÊı£¬ÓÃÓÚĞı×ª
+	//å…±è½­çš„å››å…ƒæ•°ï¼Œç”¨äºæ—‹è½¬×ª
 	public void MakeConjugateQuaternion(quaternion src,quaternion target){
 		//quaternion ans = new quaternion();
 		target.real = src.real;
@@ -49,7 +49,7 @@ public class quaternion {
 		target.z = src.z * -1;
 		//return ans;
 	}
-	//¸ù¾İĞı×ª×ø±êºÍĞı×ª½Ç£¬´´½¨ËÄÔªÊı
+	//æ ¹æ®æ—‹è½¬åæ ‡å’Œæ—‹è½¬è§’ï¼Œåˆ›å»ºå››å…ƒæ•°
 	public quaternion MakeRotationalQuaternion(double radian, double AxisX, double AxisY, double AxisZ) 
 	{ 
 	              quaternion ans = new quaternion(); 
@@ -77,7 +77,7 @@ public class quaternion {
 	              return ans; 
 	} 
 	
-	//½«Ò»¸öposition×ª»¯ÎªËÄÔªÊı
+	//å°†ä¸€ä¸ªpositionè½¬åŒ–ä¸ºå››å…ƒæ•°
 	public quaternion PutXYZToQuaternion(double PosX, double PosY, double PosZ) 
 	{ 
 	              quaternion ans = new quaternion(); 

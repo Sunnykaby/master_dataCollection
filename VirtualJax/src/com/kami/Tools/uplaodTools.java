@@ -17,15 +17,15 @@ public class uplaodTools {
 	/**
 	 * 
 	 * @param params
-	 *            ´«µİµÄÆÕÍ¨²ÎÊı
+	 *            ä¼ é€’çš„æ™®é€šå‚æ•°
 	 * @param uploadFile
-	 *            ĞèÒªÉÏ´«µÄÎÄ¼şÃû
+	 *            éœ€è¦ä¸Šä¼ çš„æ–‡ä»¶å
 	 * @param fileFormName
-	 *            ĞèÒªÉÏ´«ÎÄ¼ş±íµ¥ÖĞµÄÃû×Ö
+	 *            éœ€è¦ä¸Šä¼ æ–‡ä»¶è¡¨å•ä¸­çš„åå­—
 	 * @param newFileName
-	 *            ÉÏ´«µÄÎÄ¼şÃû³Æ£¬²»ÌîĞ´½«ÎªuploadFileµÄÃû³Æ
+	 *            ä¸Šä¼ çš„æ–‡ä»¶åç§°ï¼Œä¸å¡«å†™å°†ä¸ºuploadFileçš„åç§°
 	 * @param urlStr
-	 *            ÉÏ´«µÄ·şÎñÆ÷µÄÂ·¾¶
+	 *            ä¸Šä¼ æœåŠ¡å™¨çš„è·¯å¾„
 	 * @throws IOException
 	 */
 	public void uploadForm(Map<String, String> params, String fileFormName,
@@ -37,7 +37,7 @@ public class uplaodTools {
 
 		StringBuilder sb = new StringBuilder();
 		/**
-		 * ÆÕÍ¨µÄ±íµ¥Êı¾İ
+		 * æ™®é€šçš„è¡¨å•æ•°æ®
 		 */
 		for (String key : params.keySet()) {
 			sb.append("--" + BOUNDARY + "\r\n");
@@ -47,12 +47,12 @@ public class uplaodTools {
 			sb.append(params.get(key) + "\r\n");
 		}
 		/**
-		 * ÉÏ´«ÎÄ¼şµÄÍ·
+		 * ä¸Šä¼ æ–‡ä»¶çš„å¤´
 		 */
 		sb.append("--" + BOUNDARY + "\r\n");
 		sb.append("Content-Disposition: form-data; name=\"" + fileFormName
 				+ "\"; filename=\"" + newFileName + "\"" + "\r\n");
-		sb.append("Content-Type: image/jpeg" + "\r\n");// Èç¹û·şÎñÆ÷¶ËÓĞÎÄ¼şÀàĞÍµÄĞ£Ñé£¬±ØĞëÃ÷È·Ö¸¶¨ContentType
+		sb.append("Content-Type: image/jpeg" + "\r\n");// å¦‚æœæœåŠ¡ç«¯æœ‰æ–‡ä»¶ç±»å‹çš„æ ¡éªŒï¼Œå¿…é¡»æŒ‡æ˜ContentType
 		sb.append("\r\n");
 
 		byte[] headerInfo = sb.toString().getBytes("UTF-8");
@@ -82,7 +82,7 @@ public class uplaodTools {
 		in.close();
 		out.close();
 		if (conn.getResponseCode() == 200) {
-			System.out.println("ÉÏ´«³É¹¦");
+			System.out.println("ä¸Šä¼ æˆåŠŸ");
 		}
 
 	}
@@ -90,15 +90,15 @@ public class uplaodTools {
 	/**
 	 * 
 	 * @param params
-	 *            ´«µİµÄÆÕÍ¨²ÎÊı
+	 *            ä¼ é€’çš„æ™®é€šå‚æ•°
 	 * @param uploadFile
-	 *            ĞèÒªÉÏ´«µÄÎÄ¼şÃû
+	 *            éœ€è¦ä¸Šä¼ çš„æ–‡ä»¶å
 	 * @param fileFormName
-	 *            ĞèÒªÉÏ´«ÎÄ¼ş±íµ¥ÖĞµÄÃû×Ö
+	 *            éœ€è¦ä¸Šä¼ æ–‡ä»¶è¡¨å•ä¸­çš„åå­—
 	 * @param newFileName
-	 *            ÉÏ´«µÄÎÄ¼şÃû³Æ£¬²»ÌîĞ´½«ÎªuploadFileµÄÃû³Æ
+	 *            ä¸Šä¼ çš„æ–‡ä»¶åç§°ï¼Œä¸å¡«å†™å°†ä¸ºuploadFileçš„åç§°
 	 * @param urlStr
-	 *            ÉÏ´«µÄ·şÎñÆ÷µÄÂ·¾¶
+	 *            ä¸Šä¼ æœåŠ¡å™¨çš„è·¯å¾„
 	 * @throws IOException
 	 */
 	public void uploadFromBySocket(Map<String, String> params,
@@ -110,7 +110,7 @@ public class uplaodTools {
 
 		StringBuilder sb = new StringBuilder();
 		/**
-		 * ÆÕÍ¨µÄ±íµ¥Êı¾İ
+		 * æ™®é€šçš„è¡¨å•æ•°æ®
 		 */
 
 		if (params != null) {
@@ -127,12 +127,12 @@ public class uplaodTools {
 			sb.append("\r\n");
 		}
 		/**
-		 * ÉÏ´«ÎÄ¼şµÄÍ·
+		 * ä¸Šä¼ æ–‡ä»¶çš„å¤´
 		 */
 		sb.append("--" + BOUNDARY + "\r\n");
 		sb.append("Content-Disposition: form-data; name=\"" + fileFormName
 				+ "\"; filename=\"" + newFileName + "\"" + "\r\n");
-		sb.append("Content-Type: image/jpeg" + "\r\n");// Èç¹û·şÎñÆ÷¶ËÓĞÎÄ¼şÀàĞÍµÄĞ£Ñé£¬±ØĞëÃ÷È·Ö¸¶¨ContentType
+		sb.append("Content-Type: image/jpeg" + "\r\n");// å¦‚æœæœåŠ¡ç«¯æœ‰æ–‡ä»¶ç±»å‹çš„æ ¡éªŒï¼Œå¿…é¡»æŒ‡æ˜ContentType
 		sb.append("\r\n");
 
 		byte[] headerInfo = sb.toString().getBytes("UTF-8");
@@ -145,7 +145,7 @@ public class uplaodTools {
 		OutputStream os = socket.getOutputStream();
 		PrintStream ps = new PrintStream(os, true, "UTF-8");
 
-		// Ğ´³öÇëÇóÍ·
+		// å†™å‡ºè¯·æ±‚å¤´ï¼Œç”¨çš„postæ–¹æ³•
 		ps.println("POST " + urlStr + " HTTP/1.1");
 		ps.println("Content-Type: multipart/form-data; boundary=" + BOUNDARY);
 		ps.println("Content-Length: "
@@ -154,7 +154,7 @@ public class uplaodTools {
 		ps.println("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 
 		InputStream in = new FileInputStream(uploadFile);
-		// Ğ´³öÊı¾İ
+		// å†™å‡ºæ•°æ®
 		os.write(headerInfo);
 
 		byte[] buf = new byte[1024];

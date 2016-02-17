@@ -79,9 +79,9 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	private long milliseconds = 0;
 
 	//create the motion accel data
-	private float[] gravity = new float[3];//¼ÓËÙ¶ÈÖĞ³éÀë³öÖØÁ¦µÄ²¿·Ö
-	private float[] motion = new float[3];//¼ÓËÙ¶ÈÖĞ³éÀë³ö¶¯×÷µÄ²¿·Ö
-	//private double ratioX,ratioY,ratioZ;//¸÷ÖáºÍÖØÁ¦µÄ±ÈÀı
+	private float[] gravity = new float[3];//åŠ é€Ÿåº¦ä¸­æŠ½ç¦»å‡ºé‡åŠ›çš„éƒ¨åˆ†
+	private float[] motion = new float[3];//åŠ é€Ÿåº¦ä¸­æŠ½ç¦»å‡ºåŠ¨ä½œçš„éƒ¨åˆ†
+	//private double ratioX,ratioY,ratioZ;//å„è½´å’Œé‡åŠ›çš„æ¯”ä¾‹
 	//private double mAngleX,mAngleY,mAngleZ;
 	private String labelString;
 
@@ -104,7 +104,9 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		rovectorSensor = mgr.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		//chreate the files 
 		try {
+			
 			String currentTime = Long.toString(Calendar.getInstance().getTimeInMillis());
+			
 			String filenameacc = Environment.getExternalStorageDirectory().getAbsolutePath() +
 					"/sensordata/accel_"+currentTime+"_"+labelString+".log";
 			String filenamecompass = Environment.getExternalStorageDirectory().getAbsolutePath() + 
