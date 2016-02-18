@@ -3,6 +3,7 @@ package com.android.sensor.virtualjax;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.android.sensor.virtualjax.quaternion;
@@ -73,6 +74,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	//private double ratioX,ratioY,ratioZ;//各轴和重力的比例
 	//private double mAngleX,mAngleY,mAngleZ;
 	private String labelString;
+	private String labelTag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 
 		Bundle labelBundle = getIntent().getExtras();
 		labelString = labelBundle.getString("label");
+		labelTag = labelBundle.getString("labelTag");
 		preferred = (TextView)findViewById(R.id.preferred);
 
 		mgr = (SensorManager) this.getSystemService(SENSOR_SERVICE);
@@ -91,8 +94,9 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		rovectorSensor = mgr.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		//chreate the files 
 		try {
-			
-			String currentTime = Long.toString(Calendar.getInstance().getTimeInMillis());
+			SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+			Calendar calendar = Calendar.getInstance();
+			String currentTime = dateformat.format(calendar.getTime()).replace(" ", "-");
 			
 			String filenameacc = Environment.getExternalStorageDirectory().getAbsolutePath() +
 					"/sensordata/accel_"+currentTime+"_"+labelString+".log";
