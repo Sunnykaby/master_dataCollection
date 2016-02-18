@@ -18,21 +18,13 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-//import android.view.WindowManager;
-//import android.os.Build;
-//import java.nio.Buffer;
-//import android.net.Uri;
-//import android.provider.Settings;
-//import java.util.Date;
-//import android.R.string;
-//import android.content.Intent;
 
 public class dataCollectionActivity extends Activity implements SensorEventListener {
 	private static final String TAG = "Sensor Data Collection";
 
 	private BufferedWriter mLogAcc;
-	private BufferedWriter mlogCompass;
-	private BufferedWriter mLogOrientation;
+//	private BufferedWriter mlogCompass;
+//	private BufferedWriter mLogOrientation;
 	private BufferedWriter mLogRotation;
 	private BufferedWriter mLogposition;
 
@@ -40,8 +32,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 
 	private SensorManager mgr;
 	private Sensor accel;
-	private Sensor compass;
-	private Sensor orient;
+//	private Sensor compass;
+//	private Sensor orient;
 	private Sensor rovectorSensor;
 	
 	quaternion WPosition;
@@ -49,29 +41,26 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	quaternion currentQuaternion;
 	quaternion conjugateQuaternion;
 
-	//private TextView accelTextView; 
 	private TextView preferred;
-	//private TextView orientation;
-	//private TextView rotationTextView;
 
 	private boolean ready = false;
 
 	private float[] accelValues = new float[3];
 	private long accTime = 0;
-	private float[] compassValues = new float[3];
-	private long compTime = 0;
+//	private float[] compassValues = new float[3];
+//	private long compTime = 0;
 	private float[] rotationValues = new float[4];
 	private long rotaTime = 0;
 
-	private float[] inR = new float[9];
+//	private float[] inR = new float[9];
+//
+//	private float[] inclineMatrix = new float[9];
+//	//private float[] orientationValues = new float[3];
+//	private long orientTime = 0;
+//	private float[] prefValues = new float[3];//orientation(computed)
 
-	private float[] inclineMatrix = new float[9];
-	//private float[] orientationValues = new float[3];
-	private long orientTime = 0;
-	private float[] prefValues = new float[3];//orientation(computed)
-
-	private float mAzimuth;
-	private double mInclination;
+//	private float mAzimuth;
+//	private double mInclination;
 	private int counter;
 	//private int mRotation;
 
@@ -93,14 +82,12 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		Bundle labelBundle = getIntent().getExtras();
 		labelString = labelBundle.getString("label");
 		preferred = (TextView)findViewById(R.id.preferred);
-		//orientation = (TextView)findViewById(R.id.orientation);
-		//rotationTextView = (TextView)findViewById(R.id.rotation);
 
 		mgr = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
 		accel = mgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		compass = mgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-		orient = mgr.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+//		compass = mgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+//		orient = mgr.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 		rovectorSensor = mgr.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		//chreate the files 
 		try {
@@ -109,10 +96,10 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 			
 			String filenameacc = Environment.getExternalStorageDirectory().getAbsolutePath() +
 					"/sensordata/accel_"+currentTime+"_"+labelString+".log";
-			String filenamecompass = Environment.getExternalStorageDirectory().getAbsolutePath() + 
-					"/sensordata/compass_"+currentTime+"_"+labelString+".log";
-			String filenameoritation = Environment.getExternalStorageDirectory().getAbsolutePath() + 
-					"/sensordata/orientation_"+currentTime+"_"+labelString+".log";
+//			String filenamecompass = Environment.getExternalStorageDirectory().getAbsolutePath() + 
+//					"/sensordata/compass_"+currentTime+"_"+labelString+".log";
+//			String filenameoritation = Environment.getExternalStorageDirectory().getAbsolutePath() + 
+//					"/sensordata/orientation_"+currentTime+"_"+labelString+".log";
 			String filenameRotation = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 					"/sensordata/rotation_"+currentTime+"_"+labelString+".log";
 			String filenameposition = Environment.getExternalStorageDirectory().getAbsolutePath() + 
@@ -120,8 +107,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 
 			mLogposition = new BufferedWriter(new FileWriter(filenameposition,  true));
 			mLogAcc = new BufferedWriter(new FileWriter(filenameacc, true));
-			mlogCompass = new BufferedWriter(new FileWriter(filenamecompass, true));
-			mLogOrientation = new BufferedWriter(new FileWriter(filenameoritation, true));
+//			mlogCompass = new BufferedWriter(new FileWriter(filenamecompass, true));
+//			mLogOrientation = new BufferedWriter(new FileWriter(filenameoritation, true));
 			mLogRotation = new BufferedWriter(new FileWriter(filenameRotation,  true));
 		}
 		catch(Exception e) {
@@ -133,22 +120,13 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		WPosition = new quaternion(0,0,1,0);
 		currentQuaternion = new quaternion(0,0,0,0);
 		conjugateQuaternion = new quaternion(0,0,0,0);
-
-		//		WindowManager window = (WindowManager) this.getSystemService(WINDOW_SERVICE);
-		//		int apiLevel = Integer.parseInt(Build.VERSION.SDK);
-		//		if(apiLevel < 8) {
-		//			mRotation = window.getDefaultDisplay().getOrientation();
-		//		}
-		//		else {
-		//			//mRotation = window.getDefaultDisplay().getRotation();
-		//		}
 	}
 
 	@Override
 	protected void onResume() {
 		mgr.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME);
-		mgr.registerListener(this, compass, SensorManager.SENSOR_DELAY_GAME);
-		mgr.registerListener(this, orient, SensorManager.SENSOR_DELAY_GAME);
+//		mgr.registerListener(this, compass, SensorManager.SENSOR_DELAY_GAME);
+//		mgr.registerListener(this, orient, SensorManager.SENSOR_DELAY_GAME);
 		mgr.registerListener(this, rovectorSensor, SensorManager.SENSOR_DELAY_GAME);
 		super.onResume();
 	}
@@ -156,8 +134,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	@Override
 	protected void onPause() {
 		mgr.unregisterListener(this, accel);
-		mgr.unregisterListener(this, compass);
-		mgr.unregisterListener(this, orient);
+//		mgr.unregisterListener(this, compass);
+//		mgr.unregisterListener(this, orient);
 		mgr.unregisterListener(this, rovectorSensor);
 		super.onPause();
 	}
@@ -166,14 +144,14 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	protected void onStop(){
 		//writeLog(milliseconds,"stopping...");
 		mgr.unregisterListener(this, accel);
-		mgr.unregisterListener(this, compass);
-		mgr.unregisterListener(this, orient);
+//		mgr.unregisterListener(this, compass);
+//		mgr.unregisterListener(this, orient);
 		mgr.unregisterListener(this, rovectorSensor);
 		try {
 			mLogAcc.flush();
-			mlogCompass.flush();
+//			mlogCompass.flush();
 			mLogRotation.flush();
-			mLogOrientation.flush();
+//			mLogOrientation.flush();
 			mLogposition.flush();
 		} catch (IOException e) {
 			// ignore any errors with the logfile
@@ -186,12 +164,12 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		try {
 			mLogAcc.flush();
 			mLogAcc.close();
-			mlogCompass.flush();
-			mlogCompass.close();
+//			mlogCompass.flush();
+//			mlogCompass.close();
 			mLogRotation.flush();
 			mLogRotation.close();
-			mLogOrientation.flush();
-			mLogOrientation.close();
+//			mLogOrientation.flush();
+//			mLogOrientation.close();
 			mLogposition.close();
 			mLogposition.flush();
 		}
@@ -217,9 +195,9 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 				accelValues[i] = event.values[i];//for accel
 			}
 
-			if(compassValues[0] != 0)
+			if(rotationValues[0] != 0)
 				ready = true;
-
+//
 			for(int i=0; i<3; i++) {
 				gravity [i] = (float) (0.1 * event.values[i] + 0.9 * gravity[i]); //for gravity Data
 				motion[i] = event.values[i] - gravity[i];// for motion accel data
@@ -242,54 +220,61 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 			//				mAngleY = -mAngleY;
 			//				mAngleX = -mAngleX;
 			//			}
+//			writeLog(mLogAcc, Integer.toString(countAcc) + "  " + Long.toString(accTime) + 
+//					"  " + accelValues[0] + "  " + accelValues[1] + "  " + accelValues[2] 
+//					);
+			//将记录的加速度改为动作加速度
 			writeLog(mLogAcc, Integer.toString(countAcc) + "  " + Long.toString(accTime) + 
-					"  " + accelValues[0] + "  " + accelValues[1] + "  " + accelValues[2] 
+					"  " + motion[0] + "  " + motion[1] + "  " + motion[2] 
 					);
 			break;
-		case Sensor.TYPE_MAGNETIC_FIELD:
-			countCom++;
-			compTime = milliseconds;
-			for(int i=0; i<3; i++) {
-				compassValues[i] = event.values[i];
-			}
-			compTime = milliseconds;
-			if(accelValues[2] != 0)
-				ready = true;
-			writeLog(mlogCompass, Integer.toString(countCom) + "  " +Long.toString(compTime) + 
-					"  " + compassValues[0] + "  " + compassValues[1] + "  " + compassValues[2] 
-					);
-			break;
-		case Sensor.TYPE_ORIENTATION:
-			orientTime = milliseconds;
-			countOrient++;
-			//			for(int i=0; i<3; i++) {
-			//				orientationValues[i] = event.values[i];
-			//			}
-			if(!ready)
-				return;
-
-			if(SensorManager.getRotationMatrix(
-					inR, inclineMatrix, accelValues, compassValues)) {
-				// got a good rotation matrix
-
-				mInclination = SensorManager.getInclination(inclineMatrix);
-
-				SensorManager.getOrientation(inR, prefValues);			
-			}
-			mAzimuth = (float) Math.toDegrees(prefValues[0]);
-			if(mAzimuth < 0) {
-				mAzimuth += 360.0f;
-			}
-			writeLog( mLogOrientation, Integer.toString(countOrient) + "  " + Long.toString(orientTime) + 
-					"  " + mAzimuth + "  " + Math.toDegrees(prefValues[1]) + "  " + Math.toDegrees(prefValues[2]) +
-					"  " + Math.toDegrees(mInclination)
-					);
-			break;
+//		case Sensor.TYPE_MAGNETIC_FIELD:
+//			countCom++;
+//			compTime = milliseconds;
+//			for(int i=0; i<3; i++) {
+//				compassValues[i] = event.values[i];
+//			}
+//			compTime = milliseconds;
+//			if(accelValues[2] != 0)
+//				ready = true;
+//			writeLog(mlogCompass, Integer.toString(countCom) + "  " +Long.toString(compTime) + 
+//					"  " + compassValues[0] + "  " + compassValues[1] + "  " + compassValues[2] 
+//					);
+//			break;
+//		case Sensor.TYPE_ORIENTATION:
+//			orientTime = milliseconds;
+//			countOrient++;
+//			//			for(int i=0; i<3; i++) {
+//			//				orientationValues[i] = event.values[i];
+//			//			}
+//			if(!ready)
+//				return;
+//
+//			if(SensorManager.getRotationMatrix(
+//					inR, inclineMatrix, accelValues, compassValues)) {
+//				// got a good rotation matrix
+//
+//				mInclination = SensorManager.getInclination(inclineMatrix);
+//
+//				SensorManager.getOrientation(inR, prefValues);			
+//			}
+//			mAzimuth = (float) Math.toDegrees(prefValues[0]);
+//			if(mAzimuth < 0) {
+//				mAzimuth += 360.0f;
+//			}
+//			writeLog( mLogOrientation, Integer.toString(countOrient) + "  " + Long.toString(orientTime) + 
+//					"  " + mAzimuth + "  " + Math.toDegrees(prefValues[1]) + "  " + Math.toDegrees(prefValues[2]) +
+//					"  " + Math.toDegrees(mInclination)
+//					);
+//			break;
 		case Sensor.TYPE_ROTATION_VECTOR:
 			rotaTime = milliseconds;
 			countRota++;
 			for (int i = 0; i < 3; i++) {
 				rotationValues[i] = event.values[i];					
+			}
+			if(accelValues[2]!=0){
+				ready = true;
 			}
 			rotationValues[3] = (float)Math.sqrt(1- (Math.pow(rotationValues[0], 2) + 
 					Math.pow(rotationValues[1], 2) + Math.pow(rotationValues[2], 2)));
