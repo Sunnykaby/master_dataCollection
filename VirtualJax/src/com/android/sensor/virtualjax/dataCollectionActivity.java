@@ -1,14 +1,19 @@
 package com.android.sensor.virtualjax;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.android.sensor.virtualjax.quaternion;
+import com.kami.Tools.uplaodTools;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,9 +23,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class dataCollectionActivity extends Activity implements SensorEventListener {
+public class dataCollectionActivity extends Activity implements SensorEventListener,OnClickListener {
 	private static final String TAG = "Sensor Data Collection";
 
 	private BufferedWriter mLogAcc;
@@ -43,6 +50,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	quaternion conjugateQuaternion;
 
 	private TextView preferred;
+	private Button uploadTest;
+
 
 	private boolean ready = false;
 
@@ -85,6 +94,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		labelString = labelBundle.getString("label");
 		labelTag = labelBundle.getString("labelTag");
 		preferred = (TextView)findViewById(R.id.preferred);
+		uploadTest =(Button)findViewById(R.id.button2);
+		uploadTest.setOnClickListener(this);
 
 		mgr = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
@@ -345,22 +356,6 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		//rotationTextView.invalidate();
 	}
 
-	public void doShow(View view) {
-		// google.streetview:cbll=30.32454,-81.6584&cbp=1,yaw,,pitch,1.0
-		// yaw = degrees clockwise from North
-		// For yaw we can use either mAzimuth or orientationValues[0].
-		//
-		// pitch = degrees up or down. -90 is looking straight up,
-		// +90 is looking straight down
-		// except that pitch doesn't work properly
-		//Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(
-		//    "google.streetview:cbll=30.32454,-81.6584&cbp=1," +
-		//    Math.round(orientationValues[0]) + ",,0,1.0"
-		//    ));
-		//startActivity(intent);
-		return;
-	}
-
 	private void writeLog(BufferedWriter mLog, String str) {
 		try {
 			//mLog.write(Long.toString(time));
@@ -371,5 +366,31 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		catch(IOException ioe) {
 			ioe.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO 自动生成的方法存根
+		// TODO �Զ���ɵķ������
+				switch (v.getId()) {
+				case R.id.upLoad:
+					uplaodTools uplaodTools = new uplaodTools();
+					String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
+					"/sensordata";
+					File file = new File(filePath, "accel.log");
+					try {
+						uplaodTools.uploadFromBySocket(null, "uploadFile", file,
+								"accel.log",
+								"http://192.168.1.122:8080/strurts2fileupload/uploadAction");
+					} catch (IOException e) {
+						// TODO �Զ���ɵ� catch ��
+						e.printStackTrace();
+					}
+					break;
+				case R.id.button2:
+					
+				default:
+					break;
+				}
 	}
 }

@@ -30,7 +30,6 @@ public class MainActivity extends Activity implements OnClickListener,OnCheckedC
 	private RadioButton smokingButton;
 	private RadioButton drinkingButton;
 	private RadioButton scratchingButton;
-	private Button uploadTest;
 	private String lableTag;
 
 	@Override
@@ -41,8 +40,7 @@ public class MainActivity extends Activity implements OnClickListener,OnCheckedC
 		labelEditText = (EditText)findViewById(R.id.editText1);
 		startButton = (Button)findViewById(R.id.button1);
 		startButton.setOnClickListener(this);
-		uploadTest =(Button)findViewById(R.id.button2);
-		uploadTest.setOnClickListener(this);
+
 		activityGroup = (RadioGroup)findViewById(R.id.activityGroup);
 		smokingButton = (RadioButton)findViewById(R.id.smoking);
 		drinkingButton =(RadioButton)findViewById(R.id.drinking);
