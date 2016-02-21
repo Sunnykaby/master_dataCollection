@@ -24,7 +24,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class MainActivity extends Activity implements OnClickListener,OnCheckedChangeListener{
 	private static final String TAG = "Sensor Data Collection";
-	private EditText labelEditText;
+//	private EditText labelEditText;
 	private Button startButton;
 	private RadioGroup activityGroup;
 	private RadioButton smokingButton;
@@ -37,8 +37,8 @@ public class MainActivity extends Activity implements OnClickListener,OnCheckedC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		
-		labelEditText = (EditText)findViewById(R.id.editText1);
-		startButton = (Button)findViewById(R.id.button1);
+//		labelEditText = (EditText)findViewById(R.id.editText1);
+		startButton = (Button)findViewById(R.id.start);
 		startButton.setOnClickListener(this);
 
 		activityGroup = (RadioGroup)findViewById(R.id.activityGroup);
@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements OnClickListener,OnCheckedC
 	public void onClick(View v) {
 		// TODO �Զ���ɵķ������
 		switch (v.getId()) {
-		case R.id.button1:
+		case R.id.start:
 			if (lableTag == null) {
 				new AlertDialog.Builder(MainActivity.this).setTitle("系统提示")//设置对话框标题  
 				  
@@ -110,24 +110,24 @@ public class MainActivity extends Activity implements OnClickListener,OnCheckedC
 			}
 			Intent labelIntent = new Intent(MainActivity.this, dataCollectionActivity.class);
 			Bundle labelBundle = new Bundle();
-			labelBundle.putString("label", labelEditText.getText().toString());
+//			labelBundle.putString("label", labelEditText.getText().toString());
 			labelBundle.putString("labelTag", lableTag);
 			labelIntent.putExtras(labelBundle);
 			startActivity(labelIntent);
 			break;
-		case R.id.button2:
-			uplaodTools uplaodTools = new uplaodTools();
-			String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
-			"/sensordata";
-			File file = new File(filePath, "accel.log");
-			try {
-				uplaodTools.uploadFromBySocket(null, "uploadFile", file,
-						"accel.log",
-						"http://192.168.1.122:8080/strurts2fileupload/uploadAction");
-			} catch (IOException e) {
-				// TODO �Զ���ɵ� catch ��
-				e.printStackTrace();
-			}
+//		case R.id.button2:
+//			uplaodTools uplaodTools = new uplaodTools();
+//			String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
+//			"/sensordata";
+//			File file = new File(filePath, "accel.log");
+//			try {
+//				uplaodTools.uploadFromBySocket(null, "uploadFile", file,
+//						"accel.log",
+//						"http://192.168.1.122:8080/strurts2fileupload/uploadAction");
+//			} catch (IOException e) {
+//				// TODO �Զ���ɵ� catch ��
+//				e.printStackTrace();
+//			}
 		default:
 			break;
 		}

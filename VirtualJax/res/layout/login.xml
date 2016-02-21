@@ -4,31 +4,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
-        android:layout_marginTop="57dp"
-        android:text="uploadTest" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1"
-        android:layout_marginTop="99dp"
-        android:text="Start" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1"
-        android:text="Label:" />
-
     <RadioGroup
         android:id="@+id/activityGroup"
         android:layout_width="wrap_content"
@@ -44,20 +19,28 @@
             android:text="smoking" />
 
         <RadioButton
-            android:id="@+id/Scratching"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Scratching" />
-
-        <RadioButton
             android:id="@+id/drinking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="drinking" />
+
+        <RadioButton
+            android:id="@+id/Scratching"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scratching" />
     </RadioGroup>
 
+    <!-- <TextView
+        android:id="@+id/lableText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText1"
+        android:text="Label:" />
+
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/smokingEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/radioGroup1"
@@ -65,6 +48,15 @@
         android:layout_toRightOf="@+id/textView1"
         android:ems="10"
         android:hint="label"
-        android:text="smoking" />
+        android:text="smoking" /> -->
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="68dp"
+        android:text="Start" />
 
 </RelativeLayout>

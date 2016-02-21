@@ -13,7 +13,6 @@ import com.kami.Tools.uplaodTools;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -52,6 +51,11 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	private TextView preferred;
 	private Button uploadTest;
 
+	private String basePath;
+	private String filenameacc;
+	private String filenameRotation;
+	private String filenameposition;
+	
 
 	private boolean ready = false;
 
@@ -84,17 +88,18 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	//private double mAngleX,mAngleY,mAngleZ;
 	private String labelString;
 	private String labelTag;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
 		Bundle labelBundle = getIntent().getExtras();
-		labelString = labelBundle.getString("label");
+//		labelString = labelBundle.getString("label");
+		//1，smoking；2，drinking；3，scratching
 		labelTag = labelBundle.getString("labelTag");
 		preferred = (TextView)findViewById(R.id.preferred);
-		uploadTest =(Button)findViewById(R.id.button2);
+		uploadTest =(Button)findViewById(R.id.upLoad);
 		uploadTest.setOnClickListener(this);
 
 		mgr = (SensorManager) this.getSystemService(SENSOR_SERVICE);
@@ -108,23 +113,21 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 			SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 			Calendar calendar = Calendar.getInstance();
 			String currentTime = dateformat.format(calendar.getTime()).replace(" ", "-");
-			
-			String filenameacc = Environment.getExternalStorageDirectory().getAbsolutePath() +
-					"/sensordata/accel_"+currentTime+"_"+labelString+".log";
+			basePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
+					"/sensordata/";
+			 filenameacc = "accel_"+currentTime+"_"+labelTag+".log";
 //			String filenamecompass = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 //					"/sensordata/compass_"+currentTime+"_"+labelString+".log";
 //			String filenameoritation = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 //					"/sensordata/orientation_"+currentTime+"_"+labelString+".log";
-			String filenameRotation = Environment.getExternalStorageDirectory().getAbsolutePath() + 
-					"/sensordata/rotation_"+currentTime+"_"+labelString+".log";
-			String filenameposition = Environment.getExternalStorageDirectory().getAbsolutePath() + 
-					"/sensordata/position_"+currentTime+"_"+labelString+".log";
+			 filenameRotation = "rotation_"+currentTime+"_"+labelTag+".log";
+			 filenameposition = "position_"+currentTime+"_"+labelTag+".log";
 
-			mLogposition = new BufferedWriter(new FileWriter(filenameposition,  true));
-			mLogAcc = new BufferedWriter(new FileWriter(filenameacc, true));
+			mLogposition = new BufferedWriter(new FileWriter(basePath+filenameposition,  true));
+			mLogAcc = new BufferedWriter(new FileWriter(basePath+filenameacc, true));
 //			mlogCompass = new BufferedWriter(new FileWriter(filenamecompass, true));
 //			mLogOrientation = new BufferedWriter(new FileWriter(filenameoritation, true));
-			mLogRotation = new BufferedWriter(new FileWriter(filenameRotation,  true));
+			mLogRotation = new BufferedWriter(new FileWriter(basePath+filenameRotation,  true));
 		}
 		catch(Exception e) {
 			Log.e(TAG, "Unable to initialize the logfile");
@@ -371,23 +374,62 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	@Override
 	public void onClick(View v) {
 		// TODO 自动生成的方法存根
-		// TODO �Զ���ɵķ������
 				switch (v.getId()) {
 				case R.id.upLoad:
-					uplaodTools uplaodTools = new uplaodTools();
-					String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
-					"/sensordata";
-					File file = new File(filePath, "accel.log");
 					try {
-						uplaodTools.uploadFromBySocket(null, "uploadFile", file,
-								"accel.log",
-								"http://192.168.1.122:8080/strurts2fileupload/uploadAction");
-					} catch (IOException e) {
-						// TODO �Զ���ɵ� catch ��
-						e.printStackTrace();
+						mgr.unregisterListener(this, accel);
+						mgr.unregisterListener(this, rovectorSensor);
+						//保存文件
+						mLogAcc.flush();
+						mLogAcc.close();
+//						mlogCompass.flush();
+//						mlogCompass.close();
+						mLogRotation.flush();
+						mLogRotation.close();
+//						mLogOrientation.flush();
+//						mLogOrientation.close();
+						mLogposition.flush();
+						mLogposition.close();
 					}
+					catch(Exception e) {
+						// ignore any errors with the logfile
+						break;
+					}
+					uplaodTools uplaodTools = new uplaodTools();
+					File fileacc = new File(basePath,filenameacc);
+					File filerotation = new File(basePath,filenameRotation);
+					File filePosition = new File(basePath,filenameposition);
+					try {
+						String ipString = "http://192.168.1.106:8080/strurts2fileupload/uploadAction";
+						uplaodTools.uploadFromBySocket(null, "uploadFile", fileacc,
+								filenameacc,
+								ipString);
+						uplaodTools.uploadFromBySocket(null, "uploadFile", filerotation,
+								filenameRotation,
+								ipString);
+						uplaodTools.uploadFromBySocket(null, "uploadFile", filePosition,
+								filenameposition,
+								ipString);
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+						new AlertDialog.Builder(dataCollectionActivity.this).setTitle("系统提示")//设置对话框标题  
+						  
+					     .setMessage("文件上传失败")//设置显示的内容  
+					  
+					     .show();//在按键响应事件中显示此对话框
+						break;
+					}
+					finally{
+						
+					}
+					new AlertDialog.Builder(dataCollectionActivity.this).setTitle("系统提示")//设置对话框标题  
+					  
+				     .setMessage("文件上传成功")//设置显示的内容  
+				  
+				     .show();//在按键响应事件中显示此对话框
 					break;
-				case R.id.button2:
+//				case R.id.button2:
 					
 				default:
 					break;
