@@ -142,10 +142,10 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 
 	@Override
 	protected void onResume() {
-		mgr.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME);
+		mgr.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
 //		mgr.registerListener(this, compass, SensorManager.SENSOR_DELAY_GAME);
 //		mgr.registerListener(this, orient, SensorManager.SENSOR_DELAY_GAME);
-		mgr.registerListener(this, rovectorSensor, SensorManager.SENSOR_DELAY_GAME);
+		mgr.registerListener(this, rovectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
 		super.onResume();
 	}
 
@@ -400,7 +400,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 					File filerotation = new File(basePath,filenameRotation);
 					File filePosition = new File(basePath,filenameposition);
 					try {
-						String ipString = "http://192.168.1.106:8080/strurts2fileupload/uploadAction";
+						String ipString = "http://192.168.1.118:8080/strurts2fileupload/uploadAction";
 						uplaodTools.uploadFromBySocket(null, "uploadFile", fileacc,
 								filenameacc,
 								ipString);
