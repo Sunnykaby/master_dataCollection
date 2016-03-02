@@ -30,7 +30,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	private static final String TAG = "Sensor Data Collection";
 
 	private BufferedWriter mLogAcc;
-//	private BufferedWriter mlogCompass;
+	private BufferedWriter mlogCompass;
 //	private BufferedWriter mLogOrientation;
 	private BufferedWriter mLogRotation;
 	private BufferedWriter mLogposition;
@@ -39,7 +39,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 
 	private SensorManager mgr;
 	private Sensor accel;
-//	private Sensor compass;
+	private Sensor compass;
 //	private Sensor orient;
 	private Sensor rovectorSensor;
 	
@@ -55,14 +55,15 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	private String filenameacc;
 	private String filenameRotation;
 	private String filenameposition;
+	private String filenamecompass;
 	
 
 	private boolean ready = false;
 
 	private float[] accelValues = new float[3];
 	private long accTime = 0;
-//	private float[] compassValues = new float[3];
-//	private long compTime = 0;
+	private float[] compassValues = new float[3];
+	private long compTime = 0;
 	private float[] rotationValues = new float[4];
 	private long rotaTime = 0;
 
@@ -105,7 +106,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		mgr = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
 		accel = mgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//		compass = mgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		compass = mgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 //		orient = mgr.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 		rovectorSensor = mgr.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 		//chreate the files 
@@ -116,8 +117,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 			basePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
 					"/sensordata/";
 			 filenameacc = "accel_"+currentTime+"_"+labelTag+".log";
-//			String filenamecompass = Environment.getExternalStorageDirectory().getAbsolutePath() + 
-//					"/sensordata/compass_"+currentTime+"_"+labelString+".log";
+			filenamecompass = Environment.getExternalStorageDirectory().getAbsolutePath() + 
+					"/sensordata/compass_"+currentTime+"_"+labelString+".log";
 //			String filenameoritation = Environment.getExternalStorageDirectory().getAbsolutePath() + 
 //					"/sensordata/orientation_"+currentTime+"_"+labelString+".log";
 			 filenameRotation = "rotation_"+currentTime+"_"+labelTag+".log";
@@ -125,7 +126,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 
 			mLogposition = new BufferedWriter(new FileWriter(basePath+filenameposition,  true));
 			mLogAcc = new BufferedWriter(new FileWriter(basePath+filenameacc, true));
-//			mlogCompass = new BufferedWriter(new FileWriter(filenamecompass, true));
+			mlogCompass = new BufferedWriter(new FileWriter(filenamecompass, true));
 //			mLogOrientation = new BufferedWriter(new FileWriter(filenameoritation, true));
 			mLogRotation = new BufferedWriter(new FileWriter(basePath+filenameRotation,  true));
 		}
@@ -143,7 +144,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	@Override
 	protected void onResume() {
 		mgr.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-//		mgr.registerListener(this, compass, SensorManager.SENSOR_DELAY_GAME);
+		mgr.registerListener(this, compass, SensorManager.SENSOR_DELAY_FASTEST);
 //		mgr.registerListener(this, orient, SensorManager.SENSOR_DELAY_GAME);
 		mgr.registerListener(this, rovectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
 		super.onResume();
@@ -152,7 +153,7 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	@Override
 	protected void onPause() {
 		mgr.unregisterListener(this, accel);
-//		mgr.unregisterListener(this, compass);
+		mgr.unregisterListener(this, compass);
 //		mgr.unregisterListener(this, orient);
 		mgr.unregisterListener(this, rovectorSensor);
 		super.onPause();
@@ -162,12 +163,12 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 	protected void onStop(){
 		//writeLog(milliseconds,"stopping...");
 		mgr.unregisterListener(this, accel);
-//		mgr.unregisterListener(this, compass);
+		mgr.unregisterListener(this, compass);
 //		mgr.unregisterListener(this, orient);
 		mgr.unregisterListener(this, rovectorSensor);
 		try {
 			mLogAcc.flush();
-//			mlogCompass.flush();
+			mlogCompass.flush();
 			mLogRotation.flush();
 //			mLogOrientation.flush();
 			mLogposition.flush();
@@ -182,8 +183,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 		try {
 			mLogAcc.flush();
 			mLogAcc.close();
-//			mlogCompass.flush();
-//			mlogCompass.close();
+			mlogCompass.flush();
+			mlogCompass.close();
 			mLogRotation.flush();
 			mLogRotation.close();
 //			mLogOrientation.flush();
@@ -246,19 +247,19 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 					"  " + motion[0] + "  " + motion[1] + "  " + motion[2] 
 					);
 			break;
-//		case Sensor.TYPE_MAGNETIC_FIELD:
-//			countCom++;
-//			compTime = milliseconds;
-//			for(int i=0; i<3; i++) {
-//				compassValues[i] = event.values[i];
-//			}
-//			compTime = milliseconds;
-//			if(accelValues[2] != 0)
-//				ready = true;
-//			writeLog(mlogCompass, Integer.toString(countCom) + "  " +Long.toString(compTime) + 
-//					"  " + compassValues[0] + "  " + compassValues[1] + "  " + compassValues[2] 
-//					);
-//			break;
+		case Sensor.TYPE_MAGNETIC_FIELD:
+			countCom++;
+			compTime = milliseconds;
+			for(int i=0; i<3; i++) {
+				compassValues[i] = event.values[i];
+			}
+			compTime = milliseconds;
+			if(accelValues[2] != 0)
+				ready = true;
+			writeLog(mlogCompass, Integer.toString(countCom) + "  " +Long.toString(compTime) + 
+					"  " + compassValues[0] + "  " + compassValues[1] + "  " + compassValues[2] 
+					);
+			break;
 //		case Sensor.TYPE_ORIENTATION:
 //			orientTime = milliseconds;
 //			countOrient++;
@@ -382,8 +383,8 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 						//保存文件
 						mLogAcc.flush();
 						mLogAcc.close();
-//						mlogCompass.flush();
-//						mlogCompass.close();
+						mlogCompass.flush();
+						mlogCompass.close();
 						mLogRotation.flush();
 						mLogRotation.close();
 //						mLogOrientation.flush();
@@ -403,6 +404,9 @@ public class dataCollectionActivity extends Activity implements SensorEventListe
 						String ipString = "http://192.168.1.118:8080/strurts2fileupload/uploadAction";
 						uplaodTools.uploadFromBySocket(null, "uploadFile", fileacc,
 								filenameacc,
+								ipString);
+						uplaodTools.uploadFromBySocket(null, "uploadFile", fileacc,
+								filenamecompass,
 								ipString);
 						uplaodTools.uploadFromBySocket(null, "uploadFile", filerotation,
 								filenameRotation,
